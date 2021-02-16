@@ -1,10 +1,14 @@
 use prettytable::{Cell, Row, Table};
 use serde::Deserialize;
 use std::fmt;
+use std::{fs::File, io::BufReader, path::Path};
 
-use crate::{cost::Cost, status::BoolRepr};
+use std::error::Error;
+
+
 use crate::providers::Providers;
 use crate::status::Status;
+use crate::{cost::Cost, status::BoolRepr};
 
 #[derive(Debug, Deserialize)]
 pub struct Order {
@@ -19,6 +23,18 @@ pub struct Order {
 #[serde(untagged)]
 pub enum Orders {
     Object(Vec<Order>),
+}
+
+pub fn read_orders_from_file<P: AsRef<Path>>(path: P) -> Result<Orders, Box<dyn Error>> {
+    // Open the file in read-only mode with buffer.
+    let file = File::open(path)?;
+    let reader = BufReader::new(file);
+
+    // Read the JSON contents of the file as an instance of `User`.
+    let orders: Orders = serde_yaml::from_reader(reader)?;
+
+    // Return the `User`.
+    Ok(orders)
 }
 
 impl fmt::Debug for Orders {
@@ -47,18 +63,25 @@ impl fmt::Display for Orders {
         let mut table = Table::new();
 
         table.set_format(*prettytable::format::consts::FORMAT_NO_LINESEP_WITH_TITLE);
-        table.set_titles(row!["Description", "Provider", "Confirmed", "Paid", "Shipped", "Received"]);
+        table.set_titles(row![
+            "Description",
+            "Provider",
+            "Confirmed",
+            "Paid",
+            "Shipped",
+            "Received"
+        ]);
         match self {
             Orders::Object(orders) => {
                 for order in orders {
                     table.add_row(row![
-                        order.description,
-                        order.provider,
-                        c->order.status.confirmed.to_utf8_colored(),
-                        c->order.status.paid.to_utf8_colored(),
-                        c->order.status.shipped.to_utf8_colored(),
-                        c->order.status.received.to_utf8_colored(),
-                        ]);
+                    order.description,
+                    order.provider,
+                    c->order.status.confirmed.to_utf8_colored(),
+                    c->order.status.paid.to_utf8_colored(),
+                    c->order.status.shipped.to_utf8_colored(),
+                    c->order.status.received.to_utf8_colored(),
+                    ]);
                 }
             }
         }
