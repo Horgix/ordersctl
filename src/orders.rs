@@ -1,4 +1,4 @@
-use prettytable::{Cell, Row, Table};
+use prettytable::Table;
 use serde::Deserialize;
 use std::fmt;
 use std::{fs::File, io::BufReader, path::Path};
