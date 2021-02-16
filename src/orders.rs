@@ -31,7 +31,7 @@ pub fn read_orders_from_file<P: AsRef<Path>>(path: P) -> Result<Orders, Box<dyn 
     let reader = BufReader::new(file);
 
     // Read the JSON contents of the file as an instance of `User`.
-    let orders: Orders = serde_yaml::from_reader(reader)?;
+    let orders = serde_yaml::from_reader(reader)?;
 
     // Return the `User`.
     Ok(orders)
