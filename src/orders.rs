@@ -1,69 +1,19 @@
-use rust_decimal::prelude::FromPrimitive;
-use rusty_money::{Money, iso};
-extern crate rusty_money;
-extern crate rust_decimal;
-use prettytable::Table;
-  
+use std::error::Error;
 use std::fmt;
 use std::{fs::File, io::BufReader, path::Path};
-use std::error::Error;
 
-use serde::{Deserialize, Deserializer};
-use serde::de::{self};
+use prettytable::Table;
+use serde::Deserialize;
 
-use crate::status::Status;
-use crate::{status::BoolRepr};
-
-#[derive(Debug, Deserialize)]
-pub struct Order {
-    pub description: String,
-    pub provider: String,
-    pub content: Vec<String>,
-    #[serde(deserialize_with = "deserialize_iso_4217_money")]
-    pub cost: Money<'static, iso::Currency>,
-    pub status: Status,
-}
-
-struct DeserializeISO4217MoneyVisitor;
-
-impl<'de> de::Visitor<'de> for DeserializeISO4217MoneyVisitor {
-    type Value = Money<'static, iso::Currency>;
-
-    fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        formatter.write_str("TODO")
-    }
-
-    fn visit_f64<E>(self, v: f64) -> Result<Self::Value, E>
-    where
-            E: Error, {
-        Ok(Money::from_decimal(rust_decimal::Decimal::from_f64(v).unwrap(), rusty_money::iso::EUR))
-    }
-
-    fn visit_i64<E>(self, v: i64) -> Result<Self::Value, E>
-    where
-            E: Error, {
-        Ok(Money::from_decimal(rust_decimal::Decimal::from_i64(v).unwrap(), rusty_money::iso::EUR))
-    }
-
-    fn visit_u64<E>(self, v: u64) -> Result<Self::Value, E>
-    where
-            E: Error, {
-        Ok(Money::from_decimal(rust_decimal::Decimal::from_u64(v).unwrap(), rusty_money::iso::EUR))
-    }
-}
-
-fn deserialize_iso_4217_money<'de, D>(deserializer: D) -> Result<Money<'static, iso::Currency>, D::Error>
-where
-    D: Deserializer<'de>,
-{
-    deserializer.deserialize_any(DeserializeISO4217MoneyVisitor)
-}
+use crate::order::Order;
+use crate::status::BoolRepr;
 
 #[derive(Deserialize)]
 #[serde(untagged)]
 pub enum Orders {
     Object(Vec<Order>),
 }
+
 pub fn read_orders_from_file<P: AsRef<Path>>(path: P) -> Result<Orders, Box<dyn Error>> {
     // Open the file in read-only mode with buffer.
     let file = File::open(path)?;

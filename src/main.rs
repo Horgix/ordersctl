@@ -1,5 +1,6 @@
 #[macro_use] extern crate prettytable;
 
+pub mod order;
 pub mod orders;
 pub mod cost;
 pub mod status;
