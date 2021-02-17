@@ -1,3 +1,4 @@
+use chrono::NaiveDate;
 use rust_decimal::{prelude::FromPrimitive, Decimal};
 use rusty_money::{iso, Money};
 use serde::de::{self};
@@ -11,11 +12,17 @@ pub struct Order {
     pub description: String,
     pub provider: String,
     pub id: String,
-    pub date: String,
+    #[serde(deserialize_with = "deserialize_naivedate")]
+    pub date: NaiveDate,
     pub content: Vec<String>,
     #[serde(deserialize_with = "deserialize_iso_4217_money")]
     pub cost: Money<'static, iso::Currency>,
     pub status: Status,
+}
+
+pub fn deserialize_naivedate<'de, D: Deserializer<'de>>(deserializer: D) -> Result<NaiveDate, D::Error> {
+    let time: String = Deserialize::deserialize(deserializer)?;
+    Ok(NaiveDate::parse_from_str(&time, "%Y-%m-%d").unwrap())
 }
 
 struct DeserializeISO4217MoneyVisitor;
