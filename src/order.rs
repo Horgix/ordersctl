@@ -20,7 +20,9 @@ pub struct Order {
     pub status: Status,
 }
 
-pub fn deserialize_naivedate<'de, D: Deserializer<'de>>(deserializer: D) -> Result<NaiveDate, D::Error> {
+pub fn deserialize_naivedate<'de, D: Deserializer<'de>>(
+    deserializer: D,
+) -> Result<NaiveDate, D::Error> {
     let time: String = Deserialize::deserialize(deserializer)?;
     Ok(NaiveDate::parse_from_str(&time, "%Y-%m-%d").unwrap())
 }
@@ -34,18 +36,15 @@ impl<'de> de::Visitor<'de> for DeserializeISO4217MoneyVisitor {
         formatter.write_str("TODO")
     }
 
-    fn visit_f64<Error>(self, v: f64) -> Result<Self::Value, Error>
-    {
+    fn visit_f64<Error>(self, v: f64) -> Result<Self::Value, Error> {
         Ok(Money::from_decimal(Decimal::from_f64(v).unwrap(), iso::EUR))
     }
 
-    fn visit_i64<Error>(self, v: i64) -> Result<Self::Value, Error>
-    {
+    fn visit_i64<Error>(self, v: i64) -> Result<Self::Value, Error> {
         Ok(Money::from_decimal(Decimal::from_i64(v).unwrap(), iso::EUR))
     }
 
-    fn visit_u64<Error>(self, v: u64) -> Result<Self::Value, Error>
-    {
+    fn visit_u64<Error>(self, v: u64) -> Result<Self::Value, Error> {
         Ok(Money::from_decimal(Decimal::from_u64(v).unwrap(), iso::EUR))
     }
 }
