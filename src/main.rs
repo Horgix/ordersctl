@@ -10,7 +10,7 @@ fn main() {
     println!("Hello, world!");
 
     let orders =
-        orders::read_orders_from_file("/home/horgix/projects/ordersctl/samples/orders.yml")
+        orders::read_orders_from_file("./samples/orders.yml")
             .unwrap();
     println!("Deserialized the following Oders: \n{}", orders);
 }
