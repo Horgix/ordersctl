@@ -2,6 +2,7 @@ use std::error::Error;
 use std::fmt;
 use std::{fs::File, io::BufReader, path::Path};
 
+use itertools::Itertools;
 use prettytable::Table;
 use serde::Deserialize;
 
@@ -65,7 +66,7 @@ impl fmt::Display for Orders {
         ]);
         match self {
             Orders::Object(orders) => {
-                for order in orders {
+                for order in orders.into_iter().sorted_by_key(|o| o.date) {
                     table.add_row(row![
                     order.description,
                     order.provider,
