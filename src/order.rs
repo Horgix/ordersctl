@@ -10,6 +10,7 @@ use crate::status::Status;
 pub struct Order {
     pub description: String,
     pub provider: String,
+    pub id: String,
     pub content: Vec<String>,
     #[serde(deserialize_with = "deserialize_iso_4217_money")]
     pub cost: Money<'static, iso::Currency>,

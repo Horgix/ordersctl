@@ -55,6 +55,7 @@ impl fmt::Display for Orders {
         table.set_titles(row![
             "Description",
             "Provider",
+            "Order ID",
             "Confirmed",
             "Paid",
             "Shipped",
@@ -66,6 +67,7 @@ impl fmt::Display for Orders {
                     table.add_row(row![
                     order.description,
                     order.provider,
+                    order.id,
                     c->order.status.confirmed.to_utf8_colored(),
                     c->order.status.paid.to_utf8_colored(),
                     c->order.status.shipped.to_utf8_colored(),
