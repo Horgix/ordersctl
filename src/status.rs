@@ -24,24 +24,28 @@ impl BoolRepr for bool {
         match self {
             true => "Y",
             false => "F",
-        }.to_string()
+        }
+        .to_string()
     }
     fn to_utf8(self) -> String {
         match self {
             true => "✓",
             false => "✗",
-        }.to_string()
+        }
+        .to_string()
     }
     fn to_utf8_heavy(self) -> String {
         match self {
             true => "✔",
             false => "✘",
-        }.to_string()
+        }
+        .to_string()
     }
     fn to_utf8_colored(self) -> String {
         match self {
             true => "✅",
             false => "❌",
-        }.to_string()
+        }
+        .to_string()
     }
 }
