@@ -6,14 +6,13 @@ use std::{fs::File, io::BufReader, path::Path};
 use std::error::Error;
 
 
-use crate::providers::Providers;
 use crate::status::Status;
 use crate::{cost::Cost, status::BoolRepr};
 
 #[derive(Debug, Deserialize)]
 pub struct Order {
     pub description: String,
-    pub provider: Providers,
+    pub provider: String,
     pub content: Vec<String>,
     pub cost: Cost,
     pub status: Status,
@@ -24,7 +23,6 @@ pub struct Order {
 pub enum Orders {
     Object(Vec<Order>),
 }
-
 pub fn read_orders_from_file<P: AsRef<Path>>(path: P) -> Result<Orders, Box<dyn Error>> {
     // Open the file in read-only mode with buffer.
     let file = File::open(path)?;

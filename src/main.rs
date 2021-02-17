@@ -1,9 +1,9 @@
 #[macro_use] extern crate prettytable;
 
-pub mod providers;
 pub mod orders;
 pub mod cost;
 pub mod status;
+pub mod tests;
 
 fn main() {
     println!("Hello, world!");
