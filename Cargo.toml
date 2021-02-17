@@ -12,3 +12,4 @@ prettytable-rs = "^0.8"
 rusty-money = { version = "^0.4", features = ["iso"] }
 rust_decimal = "^1.10"
 chrono = "^0.4"
+itertools = "^0.10"
