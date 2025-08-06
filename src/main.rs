@@ -4,7 +4,6 @@ extern crate prettytable;
 pub mod order;
 pub mod orders;
 pub mod status;
-pub mod tests;
 
 fn main() {
     println!("Hello, world!");

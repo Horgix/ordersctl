@@ -2,14 +2,14 @@
 name = "ordersctl"
 version = "0.1.0"
 authors = ["Alexis Horgix Chotard <alexis.horgix.chotard@gmail.com>"]
-edition = "2018"
+edition = "2024"
 
 [dependencies]
 serde = { version = "^1.0", features = ["derive"] }
-serde_yaml = "^0.8"
+serde_yaml = "^0.9"
 log = "^0.4"
-prettytable-rs = "^0.8"
+prettytable-rs = "^0.10"
 rusty-money = { version = "^0.4", features = ["iso"] }
-rust_decimal = "^1.10"
+rust_decimal = "^1.37"
 chrono = "^0.4"
-itertools = "^0.10"
+itertools = "^0.14"
