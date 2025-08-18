@@ -1,6 +1,6 @@
 use chrono::NaiveDate;
-use rust_decimal::{prelude::FromPrimitive, Decimal};
-use rusty_money::{iso, Money};
+use rust_decimal::{Decimal, prelude::FromPrimitive};
+use rusty_money::{Money, iso};
 use serde::de::{self};
 use serde::{Deserialize, Deserializer};
 use std::fmt;
