@@ -8,8 +8,9 @@ pub mod status;
 fn main() {
     println!("Hello, world!");
 
-    let orders =
-        orders::read_orders_from_file("./samples/orders.yml")
-            .unwrap();
-    println!("Deserialized the following Oders: \n{}", orders);
+    let orders = orders::read_orders_from_file("./samples/actual-horgix-orders.yml");
+    match orders {
+        Ok(orders) => println!("Successfully read orders from file: \n{}", orders),
+        Err(e) => println!("Error reading orders: {}", e),
+    }
 }
