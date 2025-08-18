@@ -1,0 +1,15 @@
+# Actions to check rust format 
+on: [push]
+
+name: Code formatting
+
+jobs:
+  fmt:
+    name: "Check code formatting"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - run: cargo fmt --all -- --check
