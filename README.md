@@ -2,6 +2,9 @@
 
 OrdersCtl is a (for now) dumb CLI to help me track my orders.
 
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/Horgix/ordersctl/build.yml)
+![GitHub License (MIT)](https://img.shields.io/github/license/Horgix/ordersctl)
+
 It read everything from a file with items such as:
 
 ```
