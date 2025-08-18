@@ -66,9 +66,17 @@ impl fmt::Display for Orders {
         ]);
         match self {
             Orders::Object(orders) => {
+                // Truncate the description to 30 characters and add ellipsis  (...) if necessary
+                let truncate_description_if_needed = |desc: &str| {
+                    if desc.len() > 30 {
+                        format!("{}...", &desc[..27])
+                    } else {
+                        desc.to_string()
+                    }
+                };
                 for order in orders.into_iter().sorted_by_key(|o| o.date) {
                     table.add_row(row![
-                    order.description,
+                    truncate_description_if_needed(&order.description),
                     order.provider,
                     order.id,
                     order.date,
