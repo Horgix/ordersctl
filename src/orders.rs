@@ -4,6 +4,7 @@ use std::{fs::File, io::BufReader, path::Path};
 
 use itertools::Itertools;
 use prettytable::Table;
+use rusty_money::Money;
 use serde::Deserialize;
 
 use crate::order::Order;
@@ -13,6 +14,46 @@ use crate::status::BoolRepr;
 #[serde(untagged)]
 pub enum Orders {
     Object(Vec<Order>),
+}
+
+pub struct OrderStats {
+    pub total_orders: usize,
+    pub total_cost: Money<'static, rusty_money::iso::Currency>,
+    pub by_status: std::collections::HashMap<&'static str, usize>,
+}
+
+impl Orders {
+    pub fn stats(&self) -> OrderStats {
+        match self {
+            Orders::Object(orders) => {
+                let total_orders = orders.len();
+                // Get a map with the orders by status
+                let orders_by_status = std::collections::HashMap::from([
+                    ("confirmed", orders.iter().filter(|o| o.status.confirmed).count()),
+                    ("paid", orders.iter().filter(|o| o.status.paid).count()),
+                    ("shipped", orders.iter().filter(|o| o.status.shipped).count()),
+                    ("received", orders.iter().filter(|o| o.status.received).count()),
+                ]);
+
+                // FIXME: For now it considers all currencies the same
+                let total_cost = orders
+                    .iter()
+                    // Init with zero from rusty_money
+                    .fold(
+                        Money::from_minor(0, rusty_money::iso::EUR),
+                        |acc, order| {
+                            acc + order.cost.clone()
+                        }
+                    );
+
+                OrderStats {
+                    total_orders,
+                    total_cost,
+                    by_status: orders_by_status,
+                }
+            }
+        }
+    }
 }
 
 pub fn read_orders_from_file<P: AsRef<Path>>(path: P) -> Result<Orders, Box<dyn Error>> {
@@ -83,6 +124,16 @@ impl fmt::Display for Orders {
                 }
             }
         }
-        return write!(f, "{}", table.to_string());
+        // Formatted stats in a single line
+        let stats_foote = format!(
+            "Total: {} Orders ({}) | {} confirmed, {} paid, {} shipped, {} received",
+            self.stats().total_orders,
+            self.stats().total_cost,
+            self.stats().by_status.get("confirmed").unwrap(),
+            self.stats().by_status.get("paid").unwrap(),
+            self.stats().by_status.get("shipped").unwrap(),
+            self.stats().by_status.get("received").unwrap(),
+        );
+        return write!(f, "{}\n{}", table.to_string(), stats_foote);
     }
 }
