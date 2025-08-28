@@ -16,14 +16,11 @@ pub enum Orders {
 }
 
 pub fn read_orders_from_file<P: AsRef<Path>>(path: P) -> Result<Orders, Box<dyn Error>> {
-    // Open the file in read-only mode with buffer.
     let file = File::open(path)?;
     let reader = BufReader::new(file);
 
-    // Read the JSON contents of the file as an instance of `User`.
     let orders = serde_yaml::from_reader(reader)?;
 
-    // Return the `User`.
     Ok(orders)
 }
 
@@ -32,8 +29,6 @@ impl fmt::Debug for Orders {
         match self {
             Orders::Object(orders) => {
                 for order in orders {
-                    // TODO fix unused write! std::result::Result
-                    // Construct result string then write it?
                     match writeln!(f, "- {:?}", order) {
                         Ok(_) => {}
                         Err(e) => {
@@ -49,7 +44,6 @@ impl fmt::Debug for Orders {
 
 impl fmt::Display for Orders {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        // Create the table
         let mut table = Table::new();
 
         table.set_format(*prettytable::format::consts::FORMAT_NO_LINESEP_WITH_TITLE);
@@ -89,7 +83,6 @@ impl fmt::Display for Orders {
                 }
             }
         }
-        // Print the table to stdout
         return write!(f, "{}", table.to_string());
     }
 }

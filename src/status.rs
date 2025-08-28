@@ -8,11 +8,8 @@ pub struct Status {
     pub received: bool,
 }
 
-/// Additional mutation methods for `Option`.
+// Alternative ways to format a boolean for display
 pub trait BoolRepr {
-    /// Replace the existing `Some` value with a new one.
-    ///
-    /// Returns the previous value if it was present, or `None` if no replacement was made.
     fn to_yn(self) -> String;
     fn to_utf8(self) -> String;
     fn to_utf8_heavy(self) -> String;
