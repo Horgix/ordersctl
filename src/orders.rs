@@ -29,22 +29,28 @@ impl Orders {
                 let total_orders = orders.len();
                 // Get a map with the orders by status
                 let orders_by_status = std::collections::HashMap::from([
-                    ("confirmed", orders.iter().filter(|o| o.status.confirmed).count()),
+                    (
+                        "confirmed",
+                        orders.iter().filter(|o| o.status.confirmed).count(),
+                    ),
                     ("paid", orders.iter().filter(|o| o.status.paid).count()),
-                    ("shipped", orders.iter().filter(|o| o.status.shipped).count()),
-                    ("received", orders.iter().filter(|o| o.status.received).count()),
+                    (
+                        "shipped",
+                        orders.iter().filter(|o| o.status.shipped).count(),
+                    ),
+                    (
+                        "received",
+                        orders.iter().filter(|o| o.status.received).count(),
+                    ),
                 ]);
 
                 // FIXME: For now it considers all currencies the same
                 let total_cost = orders
                     .iter()
                     // Init with zero from rusty_money
-                    .fold(
-                        Money::from_minor(0, rusty_money::iso::EUR),
-                        |acc, order| {
-                            acc + order.cost.clone()
-                        }
-                    );
+                    .fold(Money::from_minor(0, rusty_money::iso::EUR), |acc, order| {
+                        acc + order.cost.clone()
+                    });
 
                 OrderStats {
                     total_orders,
