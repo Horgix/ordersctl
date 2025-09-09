@@ -1,5 +1,5 @@
-use std::env;
 use clap::{Parser, Subcommand};
+use std::env;
 
 #[macro_use]
 extern crate prettytable;
@@ -14,7 +14,7 @@ pub mod status;
     name = "ordersctl",
     version = "0.1",
     author = "Alexis Horgix Chotard <ordersctl@foss.horgix.fr>",
-    about = " OrdersCtl — A simple CLI to track your orders",
+    about = " OrdersCtl — A simple CLI to track your orders"
 )]
 struct OrdersCtlCli {
     /// Subcommands
@@ -35,15 +35,12 @@ fn main() {
 
     let orders = orders::read_orders_from_file(orders_file);
 
-
     let cli = OrdersCtlCli::parse();
 
     match &cli.command.unwrap_or(OrdersCtlSubcommands::List {}) {
-        OrdersCtlSubcommands::List {} => {
-            match orders {
-                Ok(orders) => println!("Successfully read orders from file: \n{}", orders),
-                Err(e) => println!("Error reading orders: {}", e),
-            }
-        }
+        OrdersCtlSubcommands::List {} => match orders {
+            Ok(orders) => println!("Successfully read orders from file: \n{}", orders),
+            Err(e) => println!("Error reading orders: {}", e),
+        },
     }
 }
